@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\CustomerResource;
 use App\Http\Resources\V1\CustomerCollection;
-use App\Services\V1\CustomerQuery;
-use Illuminate\Http\Request;
+use App\Filters\V1\CustomersFilter;
+
 
 class CustomerController extends Controller
 {
@@ -17,15 +18,8 @@ class CustomerController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    // https://www.youtube.com/watch?v=YGqCZjdgJJk
     {
-        // Filtering is almost always sufficient instead of searching
-        // Filtering is used to narrow down the results based on specific criteria
-        // Laravel will take the comparison [gt] = greater than - "postalCode[gt]=30000
-        // Laravel turns it in to an array no parsing necessary
-        // customer?postalCode[gt]=30000
-
-        $filter = new CustomerQuery();
+        $filter = new CustomersFilter();
         $queryItems = $filter->transform($request); // [['column', 'operator', 'value']]
 
         if (count($queryItems) == 0) { 
