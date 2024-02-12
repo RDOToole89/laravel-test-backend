@@ -23,6 +23,8 @@ class CustomerResource extends JsonResource
             'city' => $this->city,
             'state' => $this->state,
             'postalCode' => $this->postal_code,
+            // By acing the whenLoaded method invoices only show if they are also being requested
+            'invoices' => InvoiceResource::collection($this->whenLoaded('invoices')),
         ];
     }
 }
